@@ -1,0 +1,14 @@
+{
+	"TCName":"PlaceOrder",
+    "Data": {
+        "email": "test123@gmail.com",
+        "first_name": "Test_FirstName",
+        "last_name": "Test_LastName",
+        "address": "Test address",
+        "city": "Toronto",
+        "province": "Ontario",
+        "country": "Canada",
+        "postal_code": "B3P2J8",
+        "phone_number": "000-000-0000"
+     }
+ }
