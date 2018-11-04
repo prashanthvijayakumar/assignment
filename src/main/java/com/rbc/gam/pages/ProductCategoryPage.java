@@ -44,4 +44,14 @@ public class ProductCategoryPage extends BasePage {
 		logger.info("result message retrieved:\n"+ alert_message);
 		return result_value;
 	}
+	
+	public void addItemToCart(String item) {
+		try {
+			select_item_from_page(item);
+			add_to_cart_button();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

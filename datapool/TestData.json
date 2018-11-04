@@ -1,6 +1,9 @@
 {
 	"TCName":"PlaceOrder",
     "Data": {
+    	"item": "Magic Mouse",
+    	"quantity_test": "5",
+    	"quantity": "1",
         "email": "test123@gmail.com",
         "first_name": "Test_FirstName",
         "last_name": "Test_LastName",

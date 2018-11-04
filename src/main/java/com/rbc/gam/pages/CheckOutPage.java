@@ -3,6 +3,7 @@ package com.rbc.gam.pages;
 import org.openqa.selenium.By;
 
 import com.rbc.gam.utilis.InitElements;
+import com.rbc.gam.utilis.TestData;
 
 public class CheckOutPage extends BasePage {
 
@@ -35,16 +36,24 @@ public class CheckOutPage extends BasePage {
 	}
 
 	public void click_continue_btn() throws Exception {
-		waitForElement(driver.findElement(continue_btn));
-		driver.findElement(continue_btn).click();
-		logger.info("Clicked continue button");
+		
+		try {
+			waitForElement(driver.findElement(continue_btn));
+			click_element(driver.findElement(continue_btn));
+			logger.info("Clicked continue button");
+		} catch (Exception e) {
+			logger.info("Exception in click_continue_btn.");
+			throw e;
+		}
 	}
 	
 	public void enter_quantity(String value) throws Exception {
+		
 		waitForElement(driver.findElement(quantity_txt));
 		driver.findElement(quantity_txt).clear();
 		driver.findElement(quantity_txt).sendKeys(value);
 		logger.info("Quantity entered");
+		
 	}
 	
 	public String get_quantity() throws Exception {
@@ -133,6 +142,32 @@ public class CheckOutPage extends BasePage {
 		String result_value = driver.findElement(result_message).getText();
 		logger.info("result message retrieved:\n"+ result_value);
 		return result_value;
+	}
+	
+	public void update_quantity(String quantity) throws Exception {
+		enter_quantity(quantity);
+		click_update_btn();
+	}
+	
+	public void enter_shipment_details_and_purchase(TestData test_data) throws Exception {
+		
+		try {
+			click_continue_btn();
+			enter_email_address(test_data.getData().get("email"));
+			enter_first_name(test_data.getData().get("first_name"));
+			enter_last_name(test_data.getData().get("last_name"));
+			enter_address(test_data.getData().get("address"));
+			enter_city(test_data.getData().get("city"));
+			enter_province(test_data.getData().get("province"));
+			select_country(test_data.getData().get("country"));
+			enter_postal_code(test_data.getData().get("postal_code"));
+			enter_phone_number(test_data.getData().get("phone_number"));
+			select_same_as_billing_address_checkbox();
+			click_purchase_button();
+		} catch (Exception e) {
+			logger.info("Exception in enter shipment details function.");
+			throw e;
+		}
 	}
 	
 	public void isPageLoaded() {

@@ -1,6 +1,10 @@
 package com.rbc.gam.scenarios;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -15,16 +19,9 @@ import com.rbc.gam.utilis.InitElements;
 
 
 public class InitTest {
-
-	String app_url = "http://store.demoqa.com";
 	
-	Integer page_timeout = 120;
-	Integer implicit_timeout = 60;
-
-	
-	Duration element_wait = Duration.ofSeconds(60);
-	Duration element_poll = Duration.ofSeconds(2);
-	
+	Properties prop = new Properties();
+	InputStream app_details = null;
 	
 	public static Logger logger = Logger.getLogger(InitTest.class.getName());
 	WebDriver driver;
@@ -32,11 +29,31 @@ public class InitTest {
 	Wait<WebDriver> wait; 
 	
 	InitElements init_elements;
-	
-
-	
+		
 	@BeforeClass
 	public void init() {
+		
+		try {
+
+			app_details = new FileInputStream(".\\properties\\app_details.properties");
+
+			// load a properties file
+			prop.load(app_details);
+
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (app_details != null) {
+				try {
+					app_details.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		Duration element_wait = Duration.ofSeconds(Long.parseLong(prop.getProperty("element_wait")));
+		Duration element_poll = Duration.ofSeconds(Long.parseLong(prop.getProperty("element_poll")));
 		
 		PropertyConfigurator.configure(".\\properties\\log4j.properties");
 		logger.info("Beginning init function. \n Initializing driver and wait times.");
@@ -44,14 +61,13 @@ public class InitTest {
 		System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\chromedriver_win32\\chromedriver.exe");
 		
 		driver = new ChromeDriver();
-		//driver.manage().timeouts().implicitlyWait(implicit_timeout, TimeUnit.SECONDS);
-		driver.manage().timeouts().pageLoadTimeout(page_timeout, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(Long.parseLong(prop.getProperty("page_timeout")), TimeUnit.SECONDS);
 	
 		wait = new FluentWait<WebDriver>(driver).withTimeout(element_wait).pollingEvery(element_poll);
 		
-		init_elements = new InitElements(driver,logger, wait, app_url);
+		init_elements = new InitElements(driver,logger, wait, prop.getProperty("app_url"));
 		
-		driver.get(app_url);
+		driver.get(prop.getProperty("app_url"));
 		driver.manage().window().maximize();
 	}
 	

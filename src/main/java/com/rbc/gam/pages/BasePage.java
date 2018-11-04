@@ -33,9 +33,8 @@ public class BasePage {
 			wait.until(ExpectedConditions.elementToBeClickable(el));
 			logger.info("Element visible and clickble");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("Exception in finding visiblity of element"+ e.getMessage());
-			throw new Exception();
+			logger.info("Exception in finding visiblity of element");
+			throw e;
 		}
 	}
 	
@@ -45,18 +44,30 @@ public class BasePage {
 			WebElement Element = (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(el));
 			logger.info("Element visible and clickble");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("Exception in finding presemce of element"+ e.getMessage());
-			throw new Exception();
+			logger.info("Exception in finding presemce of element");
+			throw e;
 		}
 	}
 	
-	public void select_drop_down(WebElement el, String value) throws InterruptedException {
-		Select dd = new Select(el);
-		el.click();
-		//Thread.sleep(2000);
-		//dd.selectByVisibleText(value);
-		el.sendKeys(value);
+	public void select_drop_down(WebElement el, String value) throws Exception {
+		try {
+			Select dd = new Select(el);
+			el.click();
+			el.sendKeys(value);
+		} catch (Exception e) {
+			logger.info("Exception in selecting value from drop down");
+			throw e;
+		}
+	}
+	
+	public void click_element(WebElement el) throws Exception {
+		
+		try {
+			el.click();			
+		} catch (Exception e) {
+			logger.info("Exception in clicking the element.");
+			throw e;
+		}
 	}
 	
 	public void verify_result(String actual, String expected) {
